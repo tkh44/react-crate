@@ -1,6 +1,6 @@
 {
   "name": "react-crate",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "react-crate React component",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -30,10 +30,13 @@
     "react-dom": "^15.4.2",
     "standard": "^9.0.1"
   },
-  "author": "",
-  "homepage": "",
+  "author": "Kye Hohenberger",
+  "homepage": "https://github.com/tkh44/react-crate#readme",
   "license": "MIT",
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tkh44/react-crate.git"
+  },
   "keywords": [
     "react-component"
   ],
@@ -41,5 +44,11 @@
     "globals": [
       "React"
     ]
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "bugs": {
+    "url": "https://github.com/tkh44/react-crate/issues"
   }
 }
