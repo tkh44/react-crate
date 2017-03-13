@@ -26,7 +26,9 @@ const buttonCrate = crate().style({
   fontSize: '1em',
   outline: 'none'
 })
+console.log('calling compile')
 const BlueButton = buttonCrate.style({ background: 'blue' }).compile('button')
+console.log('compile called')
 
 function myHoc (Wrapped) {
   return props => {
@@ -39,6 +41,16 @@ const App = crate()
   .className(props => ['set-classname', ...props.colors])
   .style({ border: '2px solid blue', padding: 8 })
   .hoc(myHoc)
+  .componentDidMount(() => {
+    console.log('componentDidMount')
+  })
+  .componentWillReceiveProps((nextProps) => {
+    console.log('componentWillReceiveProps')
+  })
+  .componentWillUpdate((nextProps, nextState) => {
+    console.log('componentWillUpdate', nextProps, nextState)
+  })
+  .state('buttonState', 'updateButtonState', { hovered: false })
   .inspect()
   .compile(Stateless)
 
