@@ -6,18 +6,6 @@ import crate from '../../src'
 
 const pp = obj => JSON.stringify(obj, null, 2)
 
-function Stateless (props) {
-  return (
-    <pre style={props.style} className={props.className}>
-      <details open>
-        <summary>Stateless Component Props</summary>
-        {pp(props)}
-      </details>
-      {props.children}
-    </pre>
-  )
-}
-
 const buttonCrate = crate().style({
   height: '1.6em',
   width: '100%',
@@ -26,9 +14,8 @@ const buttonCrate = crate().style({
   fontSize: '1em',
   outline: 'none'
 })
-console.log('calling compile')
+
 const BlueButton = buttonCrate.style({ background: 'blue' }).compile('button')
-console.log('compile called')
 
 function myHoc (Wrapped) {
   return props => {
@@ -44,7 +31,7 @@ const App = crate()
   .componentDidMount(() => {
     console.log('componentDidMount')
   })
-  .componentWillReceiveProps((nextProps) => {
+  .componentWillReceiveProps(nextProps => {
     console.log('componentWillReceiveProps')
   })
   .componentWillUpdate((nextProps, nextState) => {
@@ -52,7 +39,7 @@ const App = crate()
   })
   .state('buttonState', 'updateButtonState', { hovered: false })
   .inspect()
-  .compile(Stateless)
+  .compile()
 
 render(
   <App
@@ -63,7 +50,15 @@ render(
     colors={['red', 'green', 'blue', 'brown', 'black', 'purple', 'yellow', 'pink']}
   >
     <h1>App</h1>
-    <BlueButton>I'm blue</BlueButton>
+    {(props, i) => (
+      <BlueButton key={i} onMouseEnter={(e) => {
+        props.updateButtonState({ hovered: true })
+      }} onMouseLeave={(e) => {
+        props.updateButtonState({hovered: false})
+      }}>
+        {`Hovered: ${props.buttonState.hovered}`}
+      </BlueButton>
+    )}
   </App>,
   document.querySelector('#demo')
 )

@@ -23,8 +23,17 @@ class Crate {
     return fn(this.hocFn)
   }
 
-  compile (Component) {
-    return this.fold(hoc => hoc(Component))
+  compile (Component = props => props.children) {
+    return this.fold(hoc => {
+      const factory = createEagerFactory(Component)
+      return hoc(props => {
+        const children = Array.isArray(props.children) ? props.children : [...props.children]
+        return h(Component, {
+          ...props,
+          children: children.map((child, i) => isFn(child) ? child(props, i) : child)
+        })
+      })
+    })
   }
 
   hoc (fn) {
@@ -37,15 +46,13 @@ class Crate {
 
   // Inspect your props at a certain point
   inspect () {
-    return this.hoc(
-      (Wrapped) => {
-        const factory = createEagerFactory(Wrapped)
-        return props => {
-          console.log(`inspect props: ${getDisplayName(Wrapped)}`, props)
-          return factory(props)
-        }
+    return this.hoc(Wrapped => {
+      const factory = createEagerFactory(Wrapped)
+      return props => {
+        console.log(`inspect props: ${getDisplayName(Wrapped)}`, props)
+        return factory(props)
       }
-    )
+    })
   }
 
   // Set prop by key
@@ -73,10 +80,10 @@ class Crate {
   // Set style
   style (s) {
     return this.prop('style', props => {
-      return ({
+      return {
         ...props.style,
         ...(isFn(s) ? s(props) : s)
-      })
+      }
     })
   }
 
