@@ -10,7 +10,8 @@ react-crate is a way to compose and build components out of existing components.
 ## Demo
 _(demo/src/index.js)_
 
- 
+[fiddle](https://jsfiddle.net/tkh44/wszntqnm/2)
+
 ```jsx
 // eslint-disable-next-line no-unused-vars
 import React from 'react'
