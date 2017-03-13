@@ -123,7 +123,7 @@ Crate.prototype.reducer = function reducer (...args) {
 }
 
 // https://github.com/acdlite/recompose/blob/master/docs/API.md#branch
-Crate.prototype.reducer = function branch (...args) {
+Crate.prototype.branch = function branch (...args) {
   return this.hoc(branch(...args))
 }
 
