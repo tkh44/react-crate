@@ -20,7 +20,9 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "recompose": "^0.22.0"
+    "react-loadable": "^3.0.0",
+    "recompose": "^0.22.0",
+    "simple-listen": "^1.1.2"
   },
   "peerDependencies": {
     "react": "next"

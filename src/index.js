@@ -1,9 +1,15 @@
-import { Component as ReactComponent, Children, createElement as h } from 'react'
+import { Component as ReactComponent, Children, createClass, createElement as h } from 'react'
+import listen from 'simple-listen'
 import classnames from 'classnames'
 import createEagerFactory from 'recompose/createEagerFactory'
 import withState from 'recompose/withState'
 import withReducer from 'recompose/withReducer'
 import branch from 'recompose/branch'
+import withPropsOnChange from 'recompose/withPropsOnChange'
+import withProps from 'recompose/withProps'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import withHandlers from 'recompose/withHandlers'
+import Loadable from 'react-loadable';
 
 const isFn = test => typeof test === 'function'
 const id = Component => Component
@@ -23,16 +29,16 @@ class Crate {
     return fn(this.hocFn)
   }
 
-  compile (Component = props => props.children) {
+  compile (Component = 'div') {
     return this.fold(hoc => {
-      const factory = createEagerFactory(Component)
-      return hoc(props => {
-        const children = Array.isArray(props.children) ? props.children : [...props.children]
-        return h(Component, {
-          ...props,
-          children: children.map((child, i) => isFn(child) ? child(props, i) : child)
-        })
-      })
+      return hoc(Component)
+    })
+  }
+
+  asyncCompile (options) {
+    const AsyncComponent = Loadable(options)
+    return this.fold(hoc => {
+      return hoc(AsyncComponent)
     })
   }
 
@@ -90,17 +96,40 @@ class Crate {
   lifecycle (name, fn) {
     return this.hoc(Wrapped => {
       const factory = createEagerFactory(Wrapped)
-      class Lifecycle extends ReactComponent {}
-      Lifecycle.prototype.render = function () {
-        return factory(this.props)
+      const CrateLifecycle = createClass({
+        render: function () {
+          return factory(this.props)
+        },
+        [name]: fn
+      })
+      return CrateLifecycle
+    })
+  }
+
+  // https://github.com/tkh44/simple-listen#api
+  on(el, events, fn, capture, context) {
+    return this.hoc(Wrapped => {
+      const factory = createEagerFactory(Wrapped)
+      class CreateOn extends ReactComponent {
+        componentDidMount () {
+          const callback = e => fn(e, this.props)
+          this.listener = listen(el, events, callback, capture, context)
+        }
+
+        componentWillUnmount () {
+          this.listener()
+        }
+
+        render () {
+          return factory(this.props)
+        }
       }
-      Lifecycle.prototype[name] = fn
-      return Lifecycle
+      return CreateOn
     })
   }
 }
 
-// Lifecycle
+// Lifecycle methods
 const lifecycleMethods = [
   'componentWillMount',
   'componentDidMount',
@@ -120,18 +149,34 @@ lifecycleMethods.forEach(method => {
 // Recompose utils
 
 // https://github.com/acdlite/recompose/blob/master/docs/API.md#withstate
-Crate.prototype.state = function state (...args) {
+Crate.prototype.withState = function state (...args) {
   return this.hoc(withState(...args))
 }
 
 // https://github.com/acdlite/recompose/blob/master/docs/API.md#withreducer
-Crate.prototype.reducer = function reducer (...args) {
+Crate.prototype.withReducer = function reducer (...args) {
   return this.hoc(withReducer(...args))
 }
 
 // https://github.com/acdlite/recompose/blob/master/docs/API.md#branch
 Crate.prototype.branch = function branch (...args) {
   return this.hoc(branch(...args))
+}
+
+Crate.prototype.withProps = function branch (...args) {
+  return this.hoc(withProps(...args))
+}
+
+Crate.prototype.withPropsOnChange = function branch (...args) {
+  return this.hoc(withPropsOnChange(...args))
+}
+
+Crate.prototype.onlyUpdateForKeys = function branch (...args) {
+  return this.hoc(onlyUpdateForKeys(...args))
+}
+
+Crate.prototype.withHandlers = function withHandlers (...args) {
+  return this.hoc(withHandlers(...args))
 }
 
 // factory
