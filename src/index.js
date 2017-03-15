@@ -1,7 +1,4 @@
 import { Component as ReactComponent, Children, createClass, createElement as h } from 'react'
-import createEagerFactory from 'recompose/createEagerFactory'
-import getDisplayName from 'recompose/getDisplayName'
-import Loadable from 'react-loadable';
 
 const isFn = test => typeof test === 'function'
 const id = Component => Component
