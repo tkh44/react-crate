@@ -20,7 +20,7 @@ const BlueButton = buttonCrate.style({background: '#329af0' }).compile('button')
 export default props => {
   return (
     <section {...props}>
-      <h1>App</h1>
+      <h1>React Crate</h1>
       <MousePos {...props} />
       <BlueButton
         onMouseEnter={e => {

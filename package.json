@@ -16,7 +16,8 @@
     "start": "nwb serve-react-demo",
     "test": "nwb test-react",
     "test:coverage": "nwb test-react --coverage",
-    "test:watch": "nwb test-react --server"
+    "test:watch": "nwb test-react --server",
+    "deploy": "gh-pages -d demo/dist"
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -28,7 +29,10 @@
     "react": "next"
   },
   "devDependencies": {
+    "data-driven-motion": "0.0.9",
+    "gh-pages": "^0.12.0",
     "nwb": "0.15.x",
+    "open-color": "^1.5.1",
     "react": "next",
     "react-dom": "next",
     "standard": "^9.0.1"
