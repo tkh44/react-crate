@@ -1,5 +1,3 @@
-import { Component as ReactComponent, Children, createClass, createElement as h } from 'react'
-
 const isFn = test => typeof test === 'function'
 const id = Component => Component
 

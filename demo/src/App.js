@@ -11,12 +11,17 @@ function random (min, max) {
 }
 
 function myHoc (Wrapped) {
+  console.log('myHoc is built')
   return props => {
     return <Wrapped {...props} dispatch={console.log} />
   }
 }
 
-const App = Crate.of('section').hoc(myHoc).compile()
+console.log('defining sectionCrate')
+const sectionCrate = Crate.of('section').hoc(myHoc)
+console.log('sectionCrate defined')
+
+const App = sectionCrate.compile()
 const Display = Crate.of(ColorDisplay).compile()
 
 const Root = props => (
