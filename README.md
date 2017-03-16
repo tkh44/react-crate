@@ -26,6 +26,7 @@ const AuthButton = Crate.of(Button)
   .hoc(connect(state => ({ loggedIn: state.auth.loggedIn })))
   .hoc(withProps(props => ({ text: props.loggedIn ? 'sign out' : 'log in' })))
   .hoc(withRebass)
+  .compile()
 
 const LoginForm = props => {
   return (
