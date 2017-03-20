@@ -1,0 +1,2 @@
+webpackJsonp([0,2],{UINM:function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n=r("U7vG"),a=r.n(n),l=function(e){return JSON.stringify(e,null,2)};t.default=function(e){return a.a.createElement("div",{style:e.style},a.a.createElement("h1",{style:e.theme.Heading.alt},"react-crate"),a.a.createElement("hr",null),a.a.createElement("pre",{style:{padding:8,border:"1px solid "+e.theme.borderColor,borderRadius:e.theme.borderRadius}},l(e)))}}});
+//# sourceMappingURL=0.9e6f2491.js.map
