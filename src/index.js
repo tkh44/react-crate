@@ -24,8 +24,7 @@ export class Crate {
   }
 
   static of (fnMap) {
-    const self = this
-    class CustomCrate extends self.prototype.constructor {
+    class CustomCrate extends this.prototype.constructor {
       constructor (fn) {
         super(fn)
         return this
@@ -34,7 +33,6 @@ export class Crate {
 
     Object.keys(fnMap).forEach(function (key) {
       const fn = fnMap[key]
-      console.log(self.prototype.constructor)
       if (typeof fn === 'object') {
         Object.assign(CustomCrate.prototype, fn)
       } else {

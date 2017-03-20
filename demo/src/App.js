@@ -6,7 +6,9 @@ import withProps from 'recompose/withProps'
 import { Crate } from '../../src'
 import Loading from './Loading'
 import ColorDisplay from './ColorDisplay'
-import Loadable from 'react-loadable'
+import recompose from '../../src/recompose'
+import rebass from '../../src/rebass'
+import loadable from '../../src/loadable'
 
 const pp = obj => JSON.stringify(obj, null, 2)
 
@@ -29,43 +31,22 @@ const time = function (time) {
   }
 }
 
-const App = props => <pre>{pp(props)}</pre>
-
-const Root = props => (
-  <App>
-    <HasProps />
-  </App>
-)
-
 // You can create a collection of your higher order functions
 // You could have react-crate-recompose, react-crate-loadable, etc
 // The advantage being that users can pull in just what they need
-const recomposeCollection = {
-  withProps(...args) {
-    const hoc = withProps(...args)
-    return this.hoc(hoc)
-  },
-  pure() {
-    return this.hoc(pure)
-  }
-}
 
 // Create our custom crate bringing in our recompose collection
 const MyCrate = Crate.of({
-  recomposeCollection,
+  recompose,
+  rebass,
+  loadable,
   myHoc: function () {
     return this.hoc(myHoc)
-  },
-  asyncCompile: function (options) {
-    const AsyncComponent = Loadable(options)
-    return this.fold(hoc => {
-      return hoc(AsyncComponent)
-    })
   }
 })
 
-// Export it as a split & pre-loaded component
-export default MyCrate
+const AsyncTestComponent = MyCrate.pure()
+  .withRebass()
   .myHoc()
   .withProps({ injected: true })
   .asyncCompile({
@@ -73,3 +54,14 @@ export default MyCrate
     LoadingComponent: Loading,
     delay: 200
   })
+
+const App = props => <div>{props.children}</div>
+
+const Root = props => (
+  <App>
+    <AsyncTestComponent p={16} color={'#343a40'} backgroundColor={'#f8f9fa'} />
+  </App>
+)
+
+// Export it as a split & pre-loaded component
+export default Root
