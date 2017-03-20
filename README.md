@@ -11,42 +11,30 @@
 [![npm package][npm-badge]][npm]
 [![Coveralls][coveralls-badge]][coveralls]
 
-### Example
+### Basic Usage
 ```jsx
 import Crate from 'react-crate'
-import withProps from 'recompose/withProps'
-import pure from 'recompose/pure'
-import Loadable from 'react-loadable'
+import recompose from 'react-crate/lib/recompose'
+import rebass from 'react-crate/lib/rebass'
+import loadable from 'react-crate/lib/loadable'
 
-// You can create a collection of your higher order functions
-// You could have react-crate-recompose, react-crate-loadable, etc
-// The advantage being that users can pull in just what they need
-const recomposeCollection = {
-  withProps(...args) {
-    const hoc = withProps(...args)
-    return this.hoc(hoc)
-  },
-  pure() {
-    return this.hoc(pure)
+function myHoc (Wrapped) {
+  return props => {
+    return <Wrapped {...props} dispatch={console.log} />
   }
 }
 
-// Create our custom crate bringing in our recompose collection
 const MyCrate = Crate.of({
-  recomposeCollection,
+  recompose,
+  rebass,
+  loadable,
   myHoc: function () {
     return this.hoc(myHoc)
-  },
-  asyncCompile: function (options) {
-    const AsyncComponent = Loadable(options)
-    return this.fold(hoc => {
-      return hoc(AsyncComponent)
-    })
   }
 })
 
-// Export it as a split & pre-loaded component
-export default MyCrate
+const AsyncTestComponent = MyCrate.pure()
+  .withRebass()
   .myHoc()
   .withProps({ injected: true })
   .asyncCompile({
@@ -54,9 +42,118 @@ export default MyCrate
     LoadingComponent: Loading,
     delay: 200
   })
+
+const Root = props => (
+  <AsyncTestComponent p={16} color={'#343a40'} backgroundColor={'#f8f9fa'} />
+)
 ```
 
+### [Recompose](https://github.com/acdlite/recompose)
 
+```bash
+npm install recompose -S
+```
+
+```javascript
+import Crate from 'react-crate'
+import recompose from 'react-crate/lib/recompose'
+
+const MyCrate = Crate.of({
+  recompose
+  //...
+})
+
+MyCrate
+  .mapProps(/*...*/)
+  .withProps(/*...*/)
+  .withPropsOnChange(/*...*/)
+  .withHandlers(/*...*/)
+  .defaultProps(/*...*/)
+  .renameProp(/*...*/)
+  .renameProps(/*...*/)
+  .flattenProp(/*...*/)
+  .withState(/*...*/)
+  .withReducer(/*...*/)
+  .branch(/*...*/)
+  .renderComponent(/*...*/)
+  .renderNothing()
+  .shouldUpdate(/*...*/)
+  .pure()
+  .onlyUpdateForKeys(/*...*/)
+  .onlyUpdateForPropTypes()
+  .withContext(/*...*/)
+  .getContext(/*...*/)
+  .lifecycle(/*...*/)
+  .toClass()
+  .compile('div')
+
+```
+
+### [React Redux](https://github.com/reactjs/react-redux)
+
+```bash
+npm install react-redux -S
+```
+
+```javascript
+import Crate from 'react-crate'
+import reactRedux from 'react-crate/lib/react-redux'
+
+const MyCrate = Crate.of({
+  reactRedux
+  //...
+})
+
+MyCrate
+  .connect(/*...*/)
+  .compile('div')
+
+```
+
+### [React Loadable](https://github.com/thejameskyle/react-loadable)
+
+```bash
+npm install react-loadable -S
+```
+
+```javascript
+import Crate from 'react-crate'
+import loadable from 'react-crate/lib/loadable'
+
+const MyCrate = Crate.of({
+  loadable
+  //...
+})
+
+MyCrate
+  .asyncCompile({
+    loader: () => import('./AsyncLoadedComponent'),
+    LoadingComponent: Loading,
+    delay: 200
+  })
+
+```
+
+### [Rebass](https://rebass-beta.now.sh)
+
+```bash
+npm install rebass@0.4.0-beta.9 -S
+```
+
+```javascript
+import Crate from 'react-crate'
+import rebass from 'react-crate/lib/rebass'
+
+const MyCrate = Crate.of({
+  rebass
+  //...
+})
+
+MyCrate
+  .withRebass()
+  .compile('div')
+
+```
 
 [build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
 [build]: https://travis-ci.org/user/repo
