@@ -3,9 +3,9 @@
   <br>
   react-crate
   <br>
-  <p style="font-size: 1rem;">Crate is a way to compose and build components out of existing components.</p>
   <br>
 </h1>
+<p align="center" style="font-size: 1rem;">Crate is a way to compose and build components out of existing components.</p>
 
 [![Travis][build-badge]][build]
 [![npm package][npm-badge]][npm]
